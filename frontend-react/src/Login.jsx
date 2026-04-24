@@ -3,10 +3,11 @@ import { useState } from "react";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const API = import.meta.env.VITE_API_URL
 
   const handleLogin = async () => {
     try {
-      const res = await fetch("https://exam-backend-js2d.onrender.com/login", {
+      const res = await fetch('${API}/login', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

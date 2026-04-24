@@ -5,6 +5,7 @@ function Exam() {
   const [answers, setAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(60);
   const [submitted, setSubmitted] = useState(false);
+  const API = import.meta.env.VITE_API_URL
 
   // 🔐 Protect route
   useEffect(() => {
@@ -18,7 +19,7 @@ function Exam() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("https://exam-backend-js2d.onrender.com/questions", {
+        const res = await fetch('${API}/questions', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -75,7 +76,7 @@ function Exam() {
         })),
       };
 
-      const res = await fetch("https://exam-backend-js2d.onrender.com/submit-exam", {
+      const res = await fetch('${API}/submit-exam', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
