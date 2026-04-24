@@ -18,7 +18,7 @@ function Exam() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://127.0.0.1:8000/questions", {
+        const res = await fetch("https://exam-backend-js2d.onrender.com/questions", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -75,7 +75,7 @@ function Exam() {
         })),
       };
 
-      const res = await fetch("http://127.0.0.1:8000/submit-exam", {
+      const res = await fetch("https://exam-backend-js2d.onrender.com/submit-exam", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
