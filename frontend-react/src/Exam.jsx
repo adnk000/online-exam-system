@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 function Exam() {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(60);
   const [submitted, setSubmitted] = useState(false);
-  const API = import.meta.env.VITE_API_URL
+  const API = import.meta.env.VITE_API_URL || "http://localhost:8000"
 
   // 🔐 Protect route
   useEffect(() => {
@@ -19,7 +19,7 @@ function Exam() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch('${API}/questions', {
+        const res = await fetch(`${API}/questions`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -40,23 +40,7 @@ function Exam() {
     };
 
     fetchQuestions();
-  }, []);
-
-  // ⏱️ Timer
-  useEffect(() => {
-    if (submitted) return;
-
-    if (timeLeft <= 0) {
-      handleSubmit();
-      return;
-    }
-
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft, submitted]);
+  }, [API]);
 
   // 🧠 Select answer
   const handleSelect = (qid, option) => {
@@ -65,7 +49,7 @@ function Exam() {
   };
 
   // 🚀 Submit
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
 
@@ -76,7 +60,7 @@ function Exam() {
         })),
       };
 
-      const res = await fetch('${API}/submit-exam', {
+      const res = await fetch(`${API}/submit-exam`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,7 +82,26 @@ function Exam() {
     } catch {
       alert("Submission failed ❌");
     }
-  };
+  }, [answers, API]);
+
+  // ⏱️ Timer
+  useEffect(() => {
+    if (submitted) return;
+
+    if (timeLeft <= 0) {
+      const timeout = setTimeout(() => {
+        handleSubmit();
+      }, 0);
+
+      return () => clearTimeout(timeout);
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft, submitted, handleSubmit]);
 
   return (
     <div className="flex min-h-screen bg-slate-900 text-white">
@@ -149,8 +152,8 @@ function Exam() {
                   type="radio"
                   name={`q-${q.id}`}
                   className="mr-2"
-                  checked={answers[q.id] === q[opt]}
-                  onChange={() => handleSelect(q.id, q[opt])}
+                  checked={answers[q.id] === opt}
+                  onChange={() => handleSelect(q.id, opt)}
                 />
                 {q[opt]}
               </label>

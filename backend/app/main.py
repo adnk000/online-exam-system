@@ -12,6 +12,8 @@ import app.models.attempt
 from app.api.routes.auth import router as auth_router
 from app.api.routes import question, admin
 
+from app.core.security import hash_password, encrypt_answer
+
 # 🔥 Create app
 app = FastAPI()
 
@@ -48,9 +50,21 @@ def seed_data():
 
     # 👨‍🎓 Users
     if not db.query(User).first():
-        db.add(User(email="student1@test.com", password="1234"))
-        db.add(User(email="student2@test.com", password="1234"))
-        db.add(User(email="admin@test.com", password="admin123"))
+        db.add(User(
+            email="student1@test.com",
+            password=hash_password("1234"),
+            role="student"
+        ))
+        db.add(User(
+            email="student2@test.com",
+            password=hash_password("1234"),
+            role="student"
+        ))
+        db.add(User(
+            email="admin@test.com",
+            password=hash_password("admin123"),
+            role="admin"
+        ))
 
     # 🧠 Questions
     if not db.query(Question).first():
@@ -60,7 +74,7 @@ def seed_data():
             option_b="4",
             option_c="5",
             option_d="6",
-            correct_option="4"
+            correct_answer=encrypt_answer("4")
         ))
 
         db.add(Question(
@@ -69,7 +83,7 @@ def seed_data():
             option_b="Delhi",
             option_c="Chennai",
             option_d="Kolkata",
-            correct_option="Delhi"
+            correct_answer=encrypt_answer("Delhi")
         ))
 
     db.commit()

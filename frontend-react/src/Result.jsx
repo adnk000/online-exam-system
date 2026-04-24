@@ -17,23 +17,15 @@ function Result() {
     if (!token) navigate("/")
   }, [navigate])
 
-  // ❌ If accessed directly without data
-  if (!scoreParam || !totalParam) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
-        <p className="text-lg">No result data found ❌</p>
-      </div>
-    )
-  }
-
-  const score = parseInt(scoreParam)
-  const total = parseInt(totalParam)
-
-  const percentage = Math.round((score / total) * 100)
+  const score = scoreParam ? parseInt(scoreParam) : 0
+  const total = totalParam ? parseInt(totalParam) : 0
+  const percentage = total > 0 ? Math.round((score / total) * 100) : 0
   const passed = percentage >= 40
 
   // 🎬 Score animation
   useEffect(() => {
+    if (!scoreParam || !totalParam) return
+
     let current = 0
 
     const interval = setInterval(() => {
@@ -46,7 +38,16 @@ function Result() {
     }, 40)
 
     return () => clearInterval(interval)
-  }, [score])
+  }, [score, scoreParam, totalParam])
+
+  // ❌ If accessed directly without data
+  if (!scoreParam || !totalParam) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
+        <p className="text-lg">No result data found ❌</p>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800 text-white">

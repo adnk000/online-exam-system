@@ -1,0 +1,53 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Frontend Build Validation",
+			"type": "shell",
+			"command": "cd d:\\DPDS\\online-exam-system\\frontend-react && npm run build",
+			"isBackground": false
+		},
+		{
+			"label": "Frontend Build Validation 2",
+			"type": "shell",
+			"command": "Set-Location d:\\DPDS\\online-exam-system\\frontend-react; npm run build",
+			"isBackground": false
+		},
+		{
+			"label": "Frontend Build Validation 3",
+			"type": "shell",
+			"command": "Set-Location d:\\DPDS\\online-exam-system\\frontend-react; npm run build",
+			"isBackground": false
+		},
+		{
+			"label": "Frontend Lint Validation",
+			"type": "shell",
+			"command": "Set-Location d:\\DPDS\\online-exam-system\\frontend-react; npm run lint",
+			"isBackground": false
+		},
+		{
+			"label": "Frontend Lint Validation 4",
+			"type": "shell",
+			"command": "Set-Location d:\\DPDS\\online-exam-system\\frontend-react; npm run lint",
+			"isBackground": false
+		},
+		{
+			"label": "Frontend Lint Validation 5",
+			"type": "shell",
+			"command": "Set-Location d:\\DPDS\\online-exam-system\\frontend-react; npm run lint",
+			"isBackground": false
+		},
+		{
+			"label": "Frontend Lint Validation 6",
+			"type": "shell",
+			"command": "Set-Location d:\\DPDS\\online-exam-system\\frontend-react; npm run lint",
+			"isBackground": false
+		},
+		{
+			"label": "Frontend Build Validation Final",
+			"type": "shell",
+			"command": "Set-Location d:\\DPDS\\online-exam-system\\frontend-react; npm run build",
+			"isBackground": false
+		}
+	]
+}

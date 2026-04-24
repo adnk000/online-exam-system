@@ -4,20 +4,20 @@ import { useNavigate } from "react-router-dom"
 function Leaderboard() {
   const [data, setData] = useState([])
   const navigate = useNavigate()
-  const API = import.meta.env.VITE_API_URL
+  const API = import.meta.env.VITE_API_URL || "http://localhost:8000"
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch('${API}/leaderboard')
+        const res = await fetch(`${API}/leaderboard`)
         const result = await res.json()
         setData(result)
-      } catch (err) {
+      } catch {
         alert("Failed to load leaderboard ❌")
       }
     }
 
     fetchLeaderboard()
-  }, [])
+  }, [API])
 
   return (
     <div className="container">

@@ -109,8 +109,9 @@ def submit_exam(
         total += 1
 
         correct = decrypt_answer(question.correct_answer)
+        selected_text = getattr(question, ans.selected_option, None)
 
-        # 🧠 Store answer
+        # 🧠 Store answer key, not the option text
         db_answer = Answer(
             question_id=ans.question_id,
             selected_option=ans.selected_option,
@@ -118,7 +119,7 @@ def submit_exam(
         )
         db.add(db_answer)
 
-        if correct == ans.selected_option:
+        if selected_text == correct:
             score += 1
 
     # 🛡 Create new attempt (start time now)

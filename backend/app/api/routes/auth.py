@@ -1,11 +1,11 @@
-from fastapi.security import HTTPBearer , HTTPAuthorizationCredentials
-from fastapi import APIRouter, Depends, HTTPException, status , Header
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
 from app.database.session import SessionLocal
 from app.models.user import User
-from app.core.security import hash_password, verify_password, create_access_token , verify_token
+from app.core.security import hash_password, verify_password, create_access_token, verify_token
 from app.schemas.user_schema import UserCreate
 
 router = APIRouter()
@@ -69,14 +69,16 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
             detail="Incorrect password"
         )
 
-    token = create_access_token({"sub": db_user.email})
+    token = create_access_token({
+        "sub": db_user.email,
+        "role": db_user.role
+    })
 
     return {
         "access_token": token,
         "token_type": "bearer"
     }
 
-from fastapi import Header
 
 def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
     

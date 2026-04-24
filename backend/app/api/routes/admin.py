@@ -20,7 +20,7 @@ def get_db():
 
 # 🔐 Admin check
 def admin_only(user):
-    if user["sub"] != "admin@test.com":
+    if user.get("role") != "admin":
         raise HTTPException(status_code=403, detail="Admin only access")
 
 

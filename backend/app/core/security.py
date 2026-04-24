@@ -1,6 +1,7 @@
+import os
 from passlib.context import CryptContext
 from cryptography.fernet import Fernet
-from jose import jwt , JWTError
+from jose import jwt, JWTError
 from datetime import datetime, timedelta, timezone
 
 
@@ -14,7 +15,7 @@ def verify_password(plain, hashed):
 
 
 
-SECRET_KEY = "mysecretkey"
+SECRET_KEY = os.environ.get("SECRET_KEY", "mysecretkey")
 ALGORITHM = "HS256"
 
 def create_access_token(data: dict):
@@ -30,10 +31,13 @@ def verify_token(token: str):
         return payload
     except JWTError:
         return None
-    
-# generate once and reuse (for project)
-SECRET_ENCRYPTION_KEY = Fernet.generate_key()
-cipher = Fernet(SECRET_ENCRYPTION_KEY)
+
+# Use a stable Fernet key so encrypted answers remain decryptable after app restart.
+SECRET_ENCRYPTION_KEY = os.environ.get(
+    "SECRET_ENCRYPTION_KEY",
+    "h9mfjDMaSgLFkCwqHVtZ-yWeDQuMrBA3vAqQUIplGZ4="
+)
+cipher = Fernet(SECRET_ENCRYPTION_KEY.encode() if isinstance(SECRET_ENCRYPTION_KEY, str) else SECRET_ENCRYPTION_KEY)
 
 def encrypt_answer(answer: str):
     return cipher.encrypt(answer.encode()).decode()
